@@ -392,12 +392,14 @@ const CSS = `
 `;
 
 // Inject styles
-if (!document.getElementById("portfolio-styles")) {
-  const s = document.createElement("style");
-  s.id = "portfolio-styles";
-  s.textContent = CSS;
-  document.head.appendChild(s);
-}
+useEffect(() => {
+  if (!document.getElementById("portfolio-styles")) {
+    const s = document.createElement("style");
+    s.id = "portfolio-styles";
+    s.textContent = CSS;
+    document.head.appendChild(s);
+  }
+}, []);
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 function getCategory(photo) {
