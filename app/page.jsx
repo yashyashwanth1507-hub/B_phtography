@@ -391,15 +391,18 @@ const CSS = `
   .page-fade { animation: fade-up 0.5s ease; }
 `;
 
-// Inject styles
-useEffect(() => {
-  if (!document.getElementById("portfolio-styles")) {
-    const s = document.createElement("style");
-    s.id = "portfolio-styles";
-    s.textContent = CSS;
-    document.head.appendChild(s);
-  }
-}, []);
+// ── StyleInjector — runs only on the client, safe for Next.js SSR ────────────
+function StyleInjector() {
+  useEffect(() => {
+    if (!document.getElementById("portfolio-styles")) {
+      const s = document.createElement("style");
+      s.id = "portfolio-styles";
+      s.textContent = CSS;
+      document.head.appendChild(s);
+    }
+  }, []);
+  return null;
+}
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 function getCategory(photo) {
@@ -705,6 +708,7 @@ export default function App() {
 
   return (
     <div>
+      <StyleInjector />
       {/* Nav */}
       <nav className="nav">
         <div className="nav-logo" onClick={() => nav("home")}>
