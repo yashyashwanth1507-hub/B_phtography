@@ -633,11 +633,11 @@ function Contact({ showToast }) {
         <div>
           <div className="contact-info-item">
             <div className="contact-label">Email</div>
-            <div className="contact-value"><a href="mailto:hello@portfolio.com">hello@portfolio.com</a></div>
+            <div className="contact-value"><a href="mailto:yashyashwanth1507@gmail.com">yashyashwanth1507@gmail.com</a></div>
           </div>
           <div className="contact-info-item">
             <div className="contact-label">Instagram</div>
-            <div className="contact-value"><a href="#">@yourhandle</a></div>
+            <div className="contact-value"><a href="#">framyx._b</a></div>
           </div>
           <div className="contact-info-item">
             <div className="contact-label">Availability</div>
@@ -652,7 +652,7 @@ function Contact({ showToast }) {
         <form className="contact-form" onSubmit={handle}>
           <div className="form-group">
             <label className="form-label">Name</label>
-            <input className="form-input" type="text" required placeholder="Yashwanth B" />
+            <input className="form-input" type="text" required placeholder="Your name" />
           </div>
           <div className="form-group">
             <label className="form-label">Email</label>
