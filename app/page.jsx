@@ -566,7 +566,7 @@ function Gallery({ photos, loading }) {
 }
 
 // ── About ─────────────────────────────────────────────────────────────────────
-function About() {
+function About({ photos }) {
   return (
     <div className="about-page page-fade">
       <div className="about-grid">
@@ -579,35 +579,49 @@ function About() {
           </div>
           <div className="about-img-accent" />
         </div>
+
         <div>
-          <div className="about-eyebrow"><span className="crimson-dot" />The Artist</div>
-          <div className="about-title">
-            Capturing <em>moments</em> that<br />refuse to be forgotten.
+          <div className="about-eyebrow">
+            <span className="crimson-dot" />
+            The Artist
           </div>
+
+          <div className="about-title">
+            Every <em>frame</em> <br /> matters.
+          </div>
+
           <p className="about-body">
-            I'm a visual storyteller obsessed with the tension between light and shadow.
-            Every frame is a conversation between what's seen and what's felt — the quiet
-            drama of a street at dusk, the raw emotion of a portrait, the abstraction hidden
-            inside the ordinary.
+            I'm Yashwanth B, the photographer behind B Photography. Through my
+            lens, I capture emotions, stories, and moments that often go
+            unnoticed. Every frame reflects my passion for creativity and my
+            belief that ordinary moments can become unforgettable memories.
           </p>
+
           <p className="about-body">
-            Based out of nowhere in particular, I travel with a single camera and an
-            unshakeable belief that the best photographs are the ones that make you stop
-            scrolling.
+            Whether it's portraits, streets, events, or everyday life, my goal
+            is to create images that make people pause, feel, and remember.
           </p>
+
+          <p className="about-body">
+            📸 Instagram: <strong>@framyx._b</strong>
+          </p>
+
           <div className="divider" />
+
           <div className="stats">
             <div>
-              <div className="stat-number">12+</div>
-              <div className="stat-label">Years shooting</div>
+              <div className="stat-number">Art of</div>
+              <div className="stat-label">Noticing</div>
             </div>
+
             <div>
-              <div className="stat-number">40K</div>
-              <div className="stat-label">Frames captured</div>
+              <div className="stat-number">{photos?.length || 0}+</div>
+              <div className="stat-label">Frames Captured</div>
             </div>
+
             <div>
-              <div className="stat-number">30+</div>
-              <div className="stat-label">Countries visited</div>
+              <div className="stat-number">100%</div>
+              <div className="stat-label">Passion Driven</div>
             </div>
           </div>
         </div>
@@ -728,9 +742,9 @@ export default function App() {
           <div className="hero-bg" />
           <div className="hero-line" />
           <div className="hero-content">
-            <div className="hero-eyebrow"><span className="crimson-dot" />THROUGH MY LENS</div>
+            <div className="hero-eyebrow"><span className="crimson-dot" />Freeze The Moments</div>
             <div className="hero-title">
-              Light.<br /><em>Shadow.</em><br />Truth.
+              Through<br /><em>My</em><br />Lens.
             </div>
             <div className="hero-sub">
               A curated collection of images that live between the decisive moment and the dream.
