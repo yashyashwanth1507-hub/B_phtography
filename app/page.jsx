@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 // ── Supabase client ──────────────────────────────────────────────────────────
 // — Supabase client —
@@ -73,6 +74,44 @@ const CSS = `
   }
   .nav-btn:hover, .nav-btn.active { color: var(--white); background: var(--black3); }
   .nav-btn.active { color: var(--crimson); }
+
+  /* ── HAMBURGER / MOBILE NAV ── */
+  .nav-hamburger {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    background: none; border: none; cursor: pointer; padding: 6px;
+    width: 40px; height: 40px; border-radius: 4px; transition: background 0.2s;
+  }
+  .nav-hamburger:hover { background: var(--black3); }
+  .nav-hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: var(--white); border-radius: 2px; transition: all 0.3s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-drawer {
+    display: none; position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+    background: rgba(10,10,10,0.98); backdrop-filter: blur(16px);
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.75rem; z-index: 99; animation: drawer-in 0.25s ease;
+  }
+  .nav-drawer.open { display: flex; }
+  @keyframes drawer-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .nav-drawer .nav-btn {
+    font-size: 1rem; padding: 0.85rem 2.5rem; width: 220px; text-align: center;
+    border: 1px solid var(--border); border-radius: 4px;
+  }
+  .nav-drawer .nav-btn.active { border-color: var(--crimson); }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+    .nav { padding: 0 1.25rem; }
+  }
 
   /* ── HERO ── */
   .hero {
@@ -687,10 +726,33 @@ function Contact({ showToast }) {
 
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
+   const router = useRouter();
+
+const [tapCount, setTapCount] = useState(0);
+const tapTimer = useRef(null);
+
+const handleLogoTap = () => {
+  const count = tapCount + 1;
+
+  setTapCount(count);
+
+  clearTimeout(tapTimer.current);
+
+  tapTimer.current = setTimeout(() => {
+    setTapCount(0);
+  }, 2000);
+
+  if (count >= 5) {
+    clearTimeout(tapTimer.current);
+    setTapCount(0);
+    router.push("/admin");
+  }
+};
   const [page, setPage] = useState("home");
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const toastTimer = useRef(null);
 
   const showToast = useCallback((msg) => {
@@ -718,23 +780,53 @@ export default function App() {
     })();
   }, [showToast]);
 
-  const nav = (p) => setPage(p);
+  const nav = (p) => { setPage(p); setMenuOpen(false); };
+
+  const NAV_ITEMS = [
+    { key: "home", label: "Home" },
+    { key: "gallery", label: "Gallery" },
+    { key: "about", label: "About" },
+    { key: "contact", label: "Contact" },
+  ];
 
   return (
     <div>
       <StyleInjector />
       {/* Nav */}
       <nav className="nav">
-        <div className="nav-logo" onClick={() => nav("home")}>
-          B's<span>PHOTOGRAHY</span>
+        <div
+  className="nav-logo"
+  onClick={() => {
+    nav("home");
+    handleLogoTap();
+  }}
+>
+          B's<span>PHOTOGRAPHY</span>
         </div>
+
+        {/* Desktop links */}
         <div className="nav-links">
-          <button className={`nav-btn ${page === "home" ? "active" : ""}`} onClick={() => nav("home")}>Home</button>
-          <button className={`nav-btn ${page === "gallery" ? "active" : ""}`} onClick={() => nav("gallery")}>Gallery</button>
-          <button className={`nav-btn ${page === "about" ? "active" : ""}`} onClick={() => nav("about")}>About</button>
-          <button className={`nav-btn ${page === "contact" ? "active" : ""}`} onClick={() => nav("contact")}>Contact</button>
+          {NAV_ITEMS.map(({ key, label }) => (
+            <button key={key} className={`nav-btn ${page === key ? "active" : ""}`} onClick={() => nav(key)}>{label}</button>
+          ))}
         </div>
+
+        {/* Hamburger (mobile) */}
+        <button
+          className={`nav-hamburger ${menuOpen ? "open" : ""}`}
+          onClick={() => setMenuOpen((o) => !o)}
+          aria-label="Toggle menu"
+        >
+          <span /><span /><span />
+        </button>
       </nav>
+
+      {/* Mobile drawer */}
+      <div className={`nav-drawer ${menuOpen ? "open" : ""}`}>
+        {NAV_ITEMS.map(({ key, label }) => (
+          <button key={key} className={`nav-btn ${page === key ? "active" : ""}`} onClick={() => nav(key)}>{label}</button>
+        ))}
+      </div>
 
       {/* Pages */}
       {page === "home" && (
@@ -757,7 +849,7 @@ export default function App() {
       )}
 
       {page === "gallery" && <Gallery photos={photos} loading={loading} />}
-      {page === "about" && <About />}
+      {page === "about" && <About photos={photos} />}
       {page === "contact" && <Contact showToast={showToast} />}
 
       {/* Footer */}
