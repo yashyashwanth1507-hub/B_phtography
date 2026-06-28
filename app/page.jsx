@@ -612,8 +612,8 @@ function About({ photos }) {
         <div style={{ position: "relative" }}>
           <div className="about-img-wrap">
             <img
-              src="https://images.unsplash.com/photo-1554080353-a576cf803bda?w=600"
-              alt="Yashwanth B"
+               src="/about.jpg"
+               alt="Yashwanth B"
             />
           </div>
           <div className="about-img-accent" />
