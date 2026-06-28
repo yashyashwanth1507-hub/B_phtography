@@ -41,7 +41,7 @@ export default function AdminPage() {
 
 const ADMIN_EMAIL = "yashyashwanth1507@gmail.com";
 
-if (session.user.email !== ADMIN_EMAIL) {
+if (session.user.email?.toLowerCase().trim() !== ADMIN_EMAIL) {
   return (
     <div
       style={{
