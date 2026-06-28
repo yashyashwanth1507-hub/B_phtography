@@ -444,8 +444,13 @@ function StyleInjector() {
 }
 
 // ── helpers ───────────────────────────────────────────────────────────────────
+function toTitleCase(str) {
+  return str.trim().toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 function getCategory(photo) {
-  return photo.category || (photo.description?.match(/\[(\w+)\]/)?.[1]) || "Uncategorized";
+  const raw = photo.category || (photo.description?.match(/\[(\w+)\]/)?.[1]) || "Uncategorized";
+  return toTitleCase(raw);
 }
 
 function formatDate(ts) {
@@ -507,7 +512,7 @@ function Gallery({ photos, loading }) {
   const [category, setCategory] = useState("All");
   const [lbIndex, setLbIndex] = useState(null);
 
-  const categories = ["All", ...Array.from(new Set(photos.map(getCategory)))];
+  const categories = ["All", ...Array.from(new Set(photos.map(getCategory))).sort()];
 
   const filtered = photos.filter((p) => {
     const matchCat = category === "All" || getCategory(p) === category;
